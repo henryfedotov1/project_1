@@ -1,0 +1,52 @@
+import random
+import requests
+from bs4 import BeautifulSoup
+
+source = 'http://www.imdb.com/chart/top'
+
+
+def main():
+    response = requests.get(source)
+
+    file = BeautifulSoup(response.text, 'html.parser')
+
+    movie_tags = file.select('td.titleColumn')
+    inner_movie_tags = file.select('td.titleColumn a')
+    rating_tags = file.select('td.posterColumn span[name=ir]')
+
+    def get_year(movie_tag):
+        moviesplit = movie_tag.text.split()
+        year = moviesplit[-1]
+        return year
+
+    years = [get_year(tag) for tag in movie_tags]
+    actors_movie = [tag['title'] for tag in inner_movie_tags]
+    titles_movie = [tag.text for tag in inner_movie_tags]
+    rating_movie = [float(tag['data-value']) for tag in rating_tags]
+    
+  
+
+    n_movies = len(movie_tags)
+    print(n_movies)
+    movies = ()
+    movies = list(movies)  
+    movies = list(movies)
+    for x in range(n_movies):
+      movies.append({
+            'title': titles_movie[x],
+            'actors': actors_movie[x],
+            'rating': rating_movie[x],
+            'year': years[x]
+    })
+    
+      
+    while True:
+        random_choice = random.randrange(0, n_movies)
+
+        print(movies[random_choice])
+
+        user_input = input('Do you want another movie (y/n)? ')
+        if user_input != 'y':
+            break
+
+print(main())
